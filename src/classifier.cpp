@@ -32,8 +32,8 @@ classifier::classifier()
 	this->m_coeff0 = std::vector<float>(5);
 	for (int i = 0; i < 5; ++i)
 	{
-		this->m_coeff1[i] = 1.0f / (std::sqrtf(2.0f*M_PI*this->m_cov1[i]));
-		this->m_coeff0[i] = 1.0f / (std::sqrtf(2.0f*M_PI*this->m_cov0[i]));
+		this->m_coeff1[i] = 1.0f / (std::sqrt(2.0f*M_PI*this->m_cov1[i]));
+		this->m_coeff0[i] = 1.0f / (std::sqrt(2.0f*M_PI*this->m_cov0[i]));
 	}
 }
 
