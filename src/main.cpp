@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <exception>
 
 #include "classifier.h"
 
@@ -13,6 +14,10 @@ int main(int argc, char *argv[])
 	catch (std::string error)
 	{
 		std::cerr << std::string("Runtime Error: ") + error;
+	}
+	catch (std::exception error)
+	{
+		std::cerr << std::string("Runtime Error: ") + std::string(error.what());
 	}
 	catch (...)
 	{
