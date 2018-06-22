@@ -26,7 +26,12 @@ classifier::classifier()
 	this->m_cov0 = { 1.00230119f, 400.05202843f, 255.68929361f, 1.00105835f, 0.9988931f };
 	this->m_mu1 = { 2.00978071f, 40.10601485f, -100.06020472f, 9.99965239f, 1.25152167f };
 	this->m_mu0 = { -2.00544103f, -0.04849786f, -100.01739565f, 9.99921426f, -1.24015505f };
-	this->m_beta << 6.62224715f, 5.6957442f, -22.10405056f, 4.6577519f, 6.51057556f;
+	this->m_beta << 2.19531247e-01, 1.01552551e-01, 1.28123349e-03,
+		-5.34413595e-02, 2.70102081e+00, 5.77751988e+00,
+		-3.02542080e-01, -2.18971780e+00, 5.08762749e+00,
+		-7.60776108e-01;
+	this->m_intercept = -4.40639467;
+
 
 	this->m_coeff1 = std::vector<float>(5);
 	this->m_coeff0 = std::vector<float>(5);
@@ -40,10 +45,11 @@ classifier::classifier()
 
 VectorXi classifier::predict(const MatrixX6f &m)
 {
-	MatrixXf data = m.rightCols(5);
+	MatrixXf data = MatrixXf(m.rows(), 10);
+	data.leftCols<5>() = m.rightCols<5>();
 
-	for (int i = 0; i < data.cols(); ++i)
-		data.col(i) = this->predict_gaussian_proba(data.col(i),i);
+	for (int i = 0; i < 5; ++i)
+		data.col(i+5) = this->predict_gaussian_proba(data.col(i),i);
 
 	VectorXf probas = this->predict_regression(data);
 
@@ -63,6 +69,7 @@ VectorXf classifier::predict_gaussian_proba(const VectorXf &vector, const int ga
 
 VectorXf classifier::predict_regression(const MatrixXf &data) const
 {
+	assert(data.cols() == 10);
 	auto dot = data*this->m_beta;
-	return 1.0f / (1.0f + (-dot.array()).exp());
+	return 1.0f / (1.0f + (-dot.array() - this->m_intercept).exp());
 }

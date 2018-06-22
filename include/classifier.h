@@ -7,7 +7,7 @@
 using namespace Eigen;
 
 typedef Matrix<float, -1, 6> MatrixX6f;
-typedef Matrix<float, 5, 1> VectorC5f;
+typedef Matrix<float, 10, 1> Vector10f;
 
 
 int run_prediction(int argc, char *argv[]);
@@ -31,5 +31,6 @@ private:
 	std::vector<float> m_coeff0;
 	std::vector<float> m_mu0;
 	std::vector<float> m_mu1;
-	VectorC5f m_beta;
+	Vector10f m_beta;
+	float m_intercept;
 };
